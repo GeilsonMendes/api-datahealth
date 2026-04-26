@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.env
+.env.*
+!.env.example
+data/*.db
+data/*.db-shm
+data/*.db-wal
+data/*.duckdb
+.venv/
+venv/
+*.egg-info/
+.coverage
+.idea/
+.vscode/
