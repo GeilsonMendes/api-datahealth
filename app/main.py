@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import get_settings
 from .exceptions import generic_exception_handler, http_exception_handler
-from .routers import cnes, indicadores, oncologia, pni, sim, sih, sinan, sinasc, system
+from .routers import cnes, indicadores, oncologia, pni, sia, sim, sih, sinan, sinasc, system, territorios
 
 settings = get_settings()
 
@@ -42,6 +42,15 @@ app.include_router(pni.router)
 app.include_router(oncologia.router)
 app.include_router(sinan.router)
 app.include_router(indicadores.router)
+app.include_router(sia.router)
+app.include_router(territorios.router)
+
+
+@app.on_event("startup")
+async def startup_data():
+    from .data_loader import ensure_database
+    from pathlib import Path
+    ensure_database(Path(settings.SQLITE_PATH))
 
 
 @app.get("/", tags=["system"])
@@ -51,6 +60,6 @@ def root():
         "servico": "api-datahealth",
         "versao": "0.1.0",
         "docs": "/docs",
-        "modulos_disponiveis": ["sim", "sih", "sinasc", "cnes", "pni", "oncologia", "sinan", "indicadores"],
-        "modulos_proximos": ["sia"],
+        "modulos_disponiveis": ["sim", "sih", "sinasc", "cnes", "pni", "oncologia", "sinan", "indicadores", "sia", "territorios"],
+        "modulos_proximos": [],
     }
